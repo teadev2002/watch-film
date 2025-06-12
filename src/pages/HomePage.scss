@@ -1,0 +1,324 @@
+// Variables for consistent theming
+$primary-color: #2563eb; // Blue-600
+$primary-hover: #1d4ed8; // Blue-700
+$gray-100: #f3f4f6;
+$gray-300: #d1d5db;
+$gray-400: #9ca3af;
+$gray-500: #6b7280;
+$gray-600: #4b5563;
+$gray-800: #1f2937;
+$white: #ffffff;
+$card-gradient: linear-gradient(43deg, rgb(65, 88, 208) 0%, rgb(200, 80, 192) 46%, rgb(255, 204, 112) 100%);
+$card-subtitle-color: rgb(255, 255, 255);
+$card-button-bg: #008bf8;
+$border-radius: 0.5rem;
+$card-border-radius: 20px;
+
+// Global styles
+.home-page {
+  min-height: 100vh;
+  background-color: $gray-100;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+// Container
+.container {
+  width: 100%;
+  max-width: none;
+  padding: 0 1rem;
+  margin: 0 auto;
+}
+
+// Header
+.header {
+  background-color: $primary-color;
+  color: $white;
+  padding: 1.5rem 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  &__title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 2.25rem;
+  }
+
+  &__subtitle {
+    margin-top: 0.5rem;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+}
+
+// Main
+.main {
+  padding: 2rem 0;
+}
+
+// Search Section
+.search-section {
+  margin-bottom: 3rem;
+
+  .search-input-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  .search-input {
+    width: 100%;
+    max-width: 28rem;
+    padding: 0.75rem;
+    border: 1px solid $gray-300;
+    border-radius: $border-radius;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+    }
+  }
+
+  .search-result {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .no-result {
+    color: $gray-500;
+    font-size: 1rem;
+  }
+}
+
+// Card Styles (Adapted from Uiverse.io by kennyotsu)
+.card-container {
+  position: relative;
+  width: 100%;
+  min-height: 200px;
+  transition: 200ms;
+
+  &.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      width: calc(100% - 10px);
+      min-height: 190px;
+    }
+  }
+}
+
+.canvas {
+  perspective: 800px;
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    "tr-1 tr-2 tr-3 tr-4 tr-5"
+    "tr-6 tr-7 tr-8 tr-9 tr-10"
+    "tr-11 tr-12 tr-13 tr-14 tr-15"
+    "tr-16 tr-17 tr-18 tr-19 tr-20"
+    "tr-21 tr-22 tr-23 tr-24 tr-25";
+}
+
+#card {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: $card-border-radius;
+  transition: 700ms;
+  background: $card-gradient;
+  padding: 1rem;
+
+  &.card--search {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  &::before {
+    content: "";
+    background: $card-gradient;
+    filter: blur(2rem);
+    opacity: 30%;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+    transition: 200ms;
+  }
+}
+
+.subtitle {
+  transform: translateY(60px);
+  color: $card-subtitle-color;
+  text-align: center;
+  width: 100%;
+  font-size: 0.875rem;
+}
+
+.title {
+  opacity: 0;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in-out;
+  transition-delay: 100ms;
+  font-size: x-large;
+  font-weight: bold;
+  color: $white;
+  text-align: center;
+}
+
+#prompt {
+  bottom: 8px;
+  left: 12px;
+  z-index: 20;
+  font-size: 1.25rem;
+  font-weight: bold;
+  transition: 300ms ease-in-out;
+  position: absolute;
+  max-width: 110px;
+  color: $white;
+}
+
+.tracker {
+  position: absolute;
+  z-index: 200;
+  width: 100%;
+  height: 100%;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:hover ~ #card #prompt {
+    opacity: 0;
+  }
+
+  &:hover ~ #card {
+    transition: 300ms;
+    filter: brightness(1.1);
+  }
+
+  &:hover ~ #card .title {
+    opacity: 1;
+  }
+}
+
+.card-container:hover #card::before {
+  transition: 200ms;
+  opacity: 80%;
+}
+
+// Tracker hover effects
+@for $i from 1 through 25 {
+  $row: ceil($i / 5);
+  $col: ($i - 1) % 5 + 1;
+  $x-angle: (3 - $row) * 10deg;
+  $y-angle: ($col - 3) * 5deg;
+
+  .tr-#{$i} {
+    grid-area: tr-#{$i};
+
+    &:hover ~ #card {
+      transition: 125ms ease-in-out;
+      transform: rotateX($x-angle) rotateY($y-angle) rotateZ(0deg);
+    }
+  }
+}
+
+.card-button {
+  margin-top: 0.5rem;
+  border-radius: $border-radius;
+  border: none;
+  background-color: $card-button-bg;
+  color: $white;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: darken($card-button-bg, 10%);
+  }
+}
+
+// Latest Films
+.latest-films {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $gray-800;
+  }
+}
+
+// Pagination
+.pagination {
+  display: flex;
+  gap: 0.5rem;
+
+  &__button {
+    padding: 0.5rem 1rem;
+    background-color: $primary-color;
+    color: $white;
+    border: none;
+    border-radius: $border-radius;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+
+    &:hover:not(:disabled) {
+      background-color: $primary-hover;
+    }
+
+    &:disabled {
+      background-color: $gray-400;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Film Grid
+.film-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+
+  .no-result--grid {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: $gray-500;
+    font-size: 1rem;
+  }
+}
+
+// Footer
+.footer {
+  background-color: $gray-800;
+  color: $white;
+  padding: 1rem 0;
+  margin-top: 3rem;
+  text-align: center;
+  font-size: 0.875rem;
+}
